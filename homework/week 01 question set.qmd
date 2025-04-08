@@ -1,0 +1,23 @@
+```{title: "Week 01 Question Set"}
+author: "Claudia-Halibut"
+```
+```{}
+1.What is your prior experience in this discipline?
+
+I have no real experience in the scope of computational genetics besides slight modeling in Rstudio and laboratory sample processing. 
+
+2. What do you hope to get out of this class?
+
+My knowledge stems from mentorship and experience - rather than coursework - so I do not have a specific answer as to what I, "hope to get out of this class". I am just excited to accept the knowledge available. As time progresses in this course I will gain comfortability in assessing genomic data with the software.
+
+3. This class is strongly rooted in an independent project related to genomic analyses. What specific project do you have in mind? If you do not have any data or preference, data can be provided / aquired. If you do not have a specfic project, what approach would you like to master as part of this class?
+
+My project uses DNA Methylation to determine age of pacific halibut. However; I am processing samples in Summer, while attending this course. Meaning I will likely get sequences back towards the end, but would love to gain experience cleaning up/processing raw data. I have been told that there are a few tester samples initially run that I can use to play around with.
+
+4. What are two things you found most useful from the reading?
+
+I was under the assumption Bash could only be run on Ubuntu but the commands are the same so far (ls, -F, and -a) with R. Which is useful information. I did also find the reverse list function useful (ls -r -F)! I did not know you could do that, but now I know.
+
+```
+
+
