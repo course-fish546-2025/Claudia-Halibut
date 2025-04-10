@@ -7,14 +7,37 @@ editor: visual
 
 4/9/2025 Objective: Installing Kallisto and running DESeq2
 ```{bash}
-#the following code downloads and runs the kallisto software
+## the following code downloads and runs the kallisto software
 
 /home/shared/kallisto/kallisto
 ```
 ```{bash}
-#the following code downloads the Pacific oyster fasta file of genes and does so ignoring the fact that gannet does not have a security certificate to authenticate via 'insecure'
+## check working directory
+pwd
+cd data/
+pwd
+```
 
-cd ../data
+```{bash}
+## the following code downloads the Pacific oyster fasta file of genes and does so ignoring the fact that gannet does not have a security certificate to authenticate via 'insecure'
+
+cd data/
 curl --insecure -O https://gannet.fish.washington.edu/seashell/bu-github/nb-2023/Cgigas/data/rna.fna
+```
+```{bash}
+## calling on the rna file, while renaming it under cgigas
+
+/home/shared/kallisto/kallisto \
+index -i \
+data/cgigas_roslin_rna.index \
+data/rna.fna
+```
+```{bash}
+## the following code will dowload the sequence reads 
+cd data 
+wget --recursive --no-parent --no-directories \
+--no-check-certificate \
+--accept '*.fastq.gz' \
+https://gannet.fish.washington.edu/seashell/bu-github/nb-2023/Cgigas/data/nopp/
 ```
 
