@@ -1,0 +1,20 @@
+---
+title: "02-RNA-seq"
+author: "Claudia-Halibut"
+format: html
+editor: visual
+---
+
+4/9/2025 Objective: Installing Kallisto and running DESeq2
+```{bash}
+#the following code downloads and runs the kallisto software
+
+/home/shared/kallisto/kallisto
+```
+```{bash}
+#the following code downloads the Pacific oyster fasta file of genes and does so ignoring the fact that gannet does not have a security certificate to authenticate via 'insecure'
+
+cd ../data
+curl --insecure -O https://gannet.fish.washington.edu/seashell/bu-github/nb-2023/Cgigas/data/rna.fna
+```
+
