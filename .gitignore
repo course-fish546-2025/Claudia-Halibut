@@ -1,4 +1,256 @@
+---
+title: "01-Blast"
+author: "Claudia-Halibut"
+format: html
+editor: visual
+---
+
+4/3/2025 Objective: Download NCBI Blast to use for annotating an unknown set of sequences
+
+```{bash}
+##check the current directory and pulls downloadable data from NCBI website
+
+pwd
+
+cd /home/jovyan/applications
+
+curl -O https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.16.0+-x64-linux.tar.gz
+
+tar -xf ncbi-blast-2.16.0+-x64-linux.tar.gz
+```
+
+```{bash}
+##double check directory before the next lines of code are run
+
+pwd
+```
+
+```{bash}
+##next chunk of code tests the function of the above lines of code and changes directory because it keeps automatically switching
+
+cd /home/jovyan/applications
+
+/home/jovyan/applications/ncbi-blast-2.16.0+/bin/blastx -h
+```
+
+Start creation of NCBI blast database via uni-plot
+#https://www.uniprot.org/downloads
+
+```{bash}
+##run pwd before running further code to check the updated directory
+
+pwd 
+```
+
+```{bash}
+##NOTE: you must use "../" to represent the number of times you are going backwards in the directories (i.e., If you were in the assignments then you are going backwards twice). 
+
+cd ../../blastdb 
+
+##check to make sure that you have successfully changed directories
+
+pwd 
+```
+
+```{bash}
+##make sure the directory is where it should be before running more code
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+
+##moves the fasta file and added "2025_01" as an identifier to allow for type identification
+
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2025_01.fasta.gz
+gunzip -k uniprot_sprot_r2025_01.fasta.gz
+
+##could add '../blastdb' to the ls function, but already in the desired directory, so only ls
+
+ls
+```
+
+```{bash}
+##the head command will allow for viewing of the first 10 lines in the UniProt document. 
+#NOTE: the * symbol acts as a wildcard with any files matching the typed file name
+
+head unip*
+```
+
+```{bash}
+##the following code provides details about what the document does as well as the function time for DNA sequences
+#NOTE: the '\' acts as an indicator to connect the lines of code, so while it is displayed as separate lines, it is all one
+
+pwd
+
+/home/jovyan/applications/ncbi-blast-2.16.0+/bin/makeblastdb    \
+-in ../blastdb/uniprot_sprot_r2025_01.fasta    \
+-dbtype prot \
+-out ../blastdb/uniprot_sprot_r2025_01
+```
+
+```{bash}
+##the following code sends the following data fasta file to the assignments/data folder
+
+curl https://eagle.fish.washington.edu/cnidarian/Ab_4denovo_CLC6_a.fa \
+-k >> ../Claudia-Halibut/assignments/data/Ab_4denovo_CLC6_a.fa
+
+pwd
+```
+
+```{bash}
+##the following code retrieves the requested info (echo prints text with the question) from the attached data set 
+
+pwd
+
+head ../Claudia-Halibut/assignments/data/Ab_4denovo_CLC6_a.fa
+
+echo "How many sequences are there?"
+
+grep -c ">" ../Claudia-Halibut/assignments/data/Ab_4denovo_CLC6_a.fa
+```
+
+```{bash}
+##check directory periodically
+
+pwd
+```
+
+```{bash}
+##change directory then run to make sure it went properly
+
+cd ../applications
+pwd
+```
+
+```{bash}
+##lots of checking the directory, mine keeps shifting for an odd reason despite setting it elsewhere. Steven says work with the output data I have and stop the large file from endlessly running
+##the following code runs the sequencing blast from the data directory, re-routes it back into the blastdb, and outputs it into the output directory 
+
+pwd
+
+cd /home/jovyan/Claudia-Halibut/assignments
+
+/home/jovyan/applications/ncbi-blast-2.16.0+/bin/blastx \
+-query data/Ab_4denovo_CLC6_a.fa \
+-db ../../blastdb/uniprot_sprot_r2025_01 \
+-out output/Ab_4-uniprot_blastx.tab \
+-evalue 1E-20 \
+-num_threads 1 \
+-max_target_seqs 1 \
+-outfmt 6
+```
+
+```{bash}
+##check current directory and head function writes in the first few lines from the set data file
+##now at this point my directory would not change no matter how much I set, so I worked around it
+
+pwd
+
+cd ../Claudia-Halibut/assignments/output
+
+head -2 Ab_4-uniprot_blastx.tab
+wc -l Ab_4-uniprot_blastx.tab
+
+##should return 710 sequence connections with 40+KB of data. Give or take (fluctuates based on run time)
+#NOTE: the below code has {{}}. This allows for better data manipulation in the following-up code
+```
+
+``` {{bash}}
+curl -O "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+organism_id:9606"
+```
+
+```{bash}
+##gather more information on blast and change directory 
+
+cd ../Claudia-Halibut/assignments/output
+
+curl -O -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?compressed=true&fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_f%2Cgo%2Cgo_p%2Cgo_c%2Cgo_id%2Ccc_interaction%2Cec%2Cxref_reactome%2Cxref_unipathway%2Cxref_interpro&format=tsv&query=%28%2A%29%20AND%20%28reviewed%3Atrue%29"
+```
+
+```{bash}
+pwd 
+```
+
+```{bash}
+##print the first few (determined number) of lines from the following document in designated directory 
+
+head -2 ../Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx.tab
+wc -l ../Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx.tab
+```
+
+```{bash}
+pwd
+```
+
+```{bash}
+##the following code states that any time the system runs across a pipes to replace it with the indicated value/character.  Followed by an output
+
+tr '|' '\t' < ../Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx.tab | head -5
+```
+
+```{bash}
+##output the selected lines from the desired data file
+
+pwd
+
+../Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx_sep.tab | head -2
+```
+
+```{bash}
+##the following code states to translate the pipe then out the resuls into a dedicated file 
+
+cd ../Claudia-Halibut/assignments/data
+
+
+tr '|' '\t' < ../output/Ab_4-uniprot_blastx.tab \
+> ../output/Ab_4-uniprot_blastx_sep.tab
+
+```
+
+```{bash}
+pwd
+```
+
+```{bash}
+##it seems some code was skipped in the class file so I am experimenting and replacing the non-existent file 
+
+#head -2 ../blastdb/uniprot_sprot_r2025_01.fasta
+#wc -l ../blastdb/uniprot_sprot_r2025_01.fasta
+```
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+##install.packages("kableExtra")
+library(kableExtra)
+
+##the current working directory, in R, is:
+getwd()
+
+
+##read the 'tab-separated' table:
+bltabl <- read.csv("../Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx_sep.tab", sep = '\t', header = FALSE)
+#---spgo <- read.csv("uniprot_sprot_r2025_01.fasta", sep = '\t', header = TRUE)
+
+##quick peek at the data table to make sure that it IS what we want it to be like 
+head(bltabl)
+
+##str(bltabl) alternate function
+##the following code will create a table function (from the dedicated bltab1 function above) and relabel certain titles. Basically one big pretty graph redesign
+
+kbl(head(left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
+  select(V1, V3, V13, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs) %>% 
+    mutate(V1 = str_replace_all(V1, pattern = "solid0078_20110412_FRAG_BC_WHITE_WHITE_F3_QV_SE_trimmed", replacement = "Ab"))
+)) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+##joins the second table and edit
+
+##left_join(bltabl, spgo,  by = c("V3" = "Entry")) %>%
+  #select(V1, V3, V13, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs) %>% mutate(V1 = str_replace_all(V1, 
+            #pattern = "solid0078_20110412_FRAG_BC_WHITE_WHITE_F3_QV_SE_trimmed", replacement = "Ab")) %>%
+  #write_delim("../output/blast_annot_go.tab", delim = '\t')
+```
+
+
 .Rproj.user
-.Rhistory
-.RData
-.Ruserdata
