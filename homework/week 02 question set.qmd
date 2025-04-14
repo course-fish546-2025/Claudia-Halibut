@@ -1,0 +1,17 @@
+```{title: "Week 02 Question Set"}
+author: "Claudia-Halibut"
+```
+```{}
+a)  **What do you feel was the most impressive thing you did in class last week was?**
+I have never had the chance to take sequencing data then analyze it through any form of software. Typically I stop at creating the DNA libraries, so seeing all the potential of the software open up was impressive. 
+
+b)  **What is your weekly goal for making progress on your project? What is the next step?**
+I do not have any data for my project, so I do not quite know yet, but I will figure it out. The next step is to talk to Dr. Roberts and hash out the details for my class project. I assume my next steps would be familiarizing myself with whatever data I do recieve. 
+
+c)  **There were two readings this week not from the textbook, meant for two different audiences. Which reading did you get the most out of and why? Do you have any questions regarding the Journal of Shellfish Research paper?**
+
+d)  **What is your favorite thing about markdown and why?**
+There are so many cool features I am discovering. Right now I really enjoy the translate function because it seems like an effective way to alter tables. I also enjoy rerouting the file, which I think is done with the > symbol.
+
+e) **What is the differnce between `curl` and `wget`? When would you used one over the other?
+```
