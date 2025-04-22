@@ -17,4 +17,6 @@ c. **What’s gone wrong with this code? Why are the points not blue?**
 
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+  
+  Note if you are using the ggplot package then it contains certain color package in it. Use scale_color_brewer example. You can add that to the code in separate brackets then specify that you want the points in blue. It also doesn't seem as though the points were specified separately. Based on how you type the input command then the system will assume color is data from the given file, So instead of a comma after hwy, you need to put a parentheses to separate color, that way it reads it as a different value.  
 ```
