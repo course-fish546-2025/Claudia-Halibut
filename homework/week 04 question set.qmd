@@ -15,5 +15,5 @@ c.**What has been the most challenging part of your research project? Are you ha
 The entire thing; I cannot get my files to properly download, but once they do download EVENTUALLY, I have to figured out how to unpack it all. I feel as though my organizational skills are off from an outside perspective, sort of in the event someone else needs to understand what I wrote, but if I add more detail then that makes the code a bit messy/congested. 
 
 d.**For last weeks assignment what did you appreciate the most about knitting documents?**
-While I am still navigating submitting the HTML formatted knit document. I appreciate the concept of taking the data we have pulled so far then elevating it to another step. For example, using the echo functions to ask questions, then proceeding to add the code for a graph that will depict the visual representation. Typically I do one of the other, but not both in a report.
+While I am still navigating submitting the HTML formatted knit document. I appreciate the concept of taking the data we have pulled so far then elevating it to another step. For example, using the echo functions to ask questions, then proceeding to add the code for a graph that will depict the visual representation. Typically I do one or the other, but not both in a report, so that has been appreciated so far.
 ```
