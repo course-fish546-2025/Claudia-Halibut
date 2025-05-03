@@ -14,12 +14,13 @@ download genome accession GCF_022539355.2
 
 ```
 ```{bash}
-unzip ../data/ncbi_dataset.zip -d ../data/
+cd ../data
+unzip ncbi_dataset.zip
 ```
 
 ```{bash}
 mkdir ../data/genome
-cp ../data/nc
+cp ../data/ncbi_dataset/data/GCF_022539355.2/GCF_022539355.2_HSTE1.2_genomic.fna ../data/genome/GCF_022539355.2_HSTE1.2_genomic.fa
 ```
 
 
@@ -27,11 +28,11 @@ cp ../data/nc
 # Directories and programs
 bismark_dir="/srlab/programs/Bismark-0.24.2"
 bowtie2_dir="/srlab/programs/bowtie2-2.5.4-sra-linux-x86_64/"
-genome_folder="/mmfs1/home/sr320/github/Claudia-Halibut/project/data/genome/"
+genome_folder="../data/genome/"
 
 ${bismark_dir}/bismark_genome_preparation \
 --verbose \
---parallel 32 \
+--parallel 24 \
 --path_to_aligner ${bowtie2_dir} \
 ${genome_folder}
 ```
