@@ -1,9 +1,9 @@
 {
     "id": "D7749259",
-    "path": "~/github/Claudia-Halibut/.gitignore",
+    "path": "/mmfs1/gscratch/scrubbed/sr320/github/Claudia-Halibut/.gitignore",
     "project_path": ".gitignore",
     "type": "gitignore",
-    "hash": "1316849717",
+    "hash": "3238630536",
     "contents": "",
     "dirty": false,
     "created": 1746303775015.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "0,13",
+        "cursorPosition": "0,0",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1746303806,
+    "lastKnownWriteTime": 1746307169,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1746303806944,
+    "last_content_update": 1746307169788,
     "read_only": false,
     "read_only_alternatives": []
 }

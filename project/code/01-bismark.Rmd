@@ -5,6 +5,24 @@ date: "2025-05-03"
 author: Steven Roberts
 ---
 
+
+```{bash}
+cd ../data
+
+/srlab/programs/ncbi-datasets-v13.34.0/datasets \
+download genome accession GCF_022539355.2
+
+```
+```{bash}
+unzip ../data/ncbi_dataset.zip -d ../data/
+```
+
+```{bash}
+mkdir ../data/genome
+cp ../data/nc
+```
+
+
 ```{bash}
 # Directories and programs
 bismark_dir="/srlab/programs/Bismark-0.24.2"
