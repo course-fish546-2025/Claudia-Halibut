@@ -1,7 +1,3 @@
-608084d75cb3f63ebee71a8f764f113a  ncbi_dataset/data/assembly_data_report.jsonl
+de9c2e8e151490626f5195c331c92474  ncbi_dataset/data/assembly_data_report.jsonl
 da82a929ac9a86f212d7705b24405847  ncbi_dataset/data/GCF_022539355.2/GCF_022539355.2_HSTE1.2_genomic.fna
-92fe2212c507b10f134f325c83edbae9  ncbi_dataset/data/GCF_022539355.2/genomic.gff
-8c8a2cdf46eae1a1d95c812fd08aa628  ncbi_dataset/data/GCF_022539355.2/protein.faa
-1339b43c2920310e648839253ed46dc3  ncbi_dataset/data/GCF_022539355.2/rna.fna
-07ef550d83e2c398f7333fc3d75f9c63  ncbi_dataset/data/GCF_022539355.2/cds_from_genomic.fna
-fcf4b92835795c6e9061d6a958176bd0  ncbi_dataset/data/GCF_022539355.2/sequence_report.jsonl
+c93c95552799e59009161c80b5692a61  ncbi_dataset/data/dataset_catalog.json

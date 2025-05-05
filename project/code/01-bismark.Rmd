@@ -9,7 +9,7 @@ author: Steven Roberts
 ```{bash}
 cd ../data
 
-/srlab/programs/ncbi-datasets-v13.34.0/datasets \
+/home/shared/datasets \
 download genome accession GCF_022539355.2
 
 ```
@@ -26,8 +26,8 @@ cp ../data/ncbi_dataset/data/GCF_022539355.2/GCF_022539355.2_HSTE1.2_genomic.fna
 
 ```{bash}
 # Directories and programs
-bismark_dir="/srlab/programs/Bismark-0.24.2"
-bowtie2_dir="/srlab/programs/bowtie2-2.5.4-sra-linux-x86_64/"
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
 genome_folder="../data/genome/"
 
 ${bismark_dir}/bismark_genome_preparation \
@@ -38,22 +38,31 @@ ${genome_folder}
 ```
 
 
+
+
+
+
+```{bash}
+
+```
+
+
 ```{bash}
 
 # Directories and programs
-bismark_dir="/srlab/programs/Bismark-0.24.2"
-bowtie2_dir="/srlab/programs/bowtie2-2.5.4-sra-linux-x86_64/"
-genome_folder="/mmfs1/home/sr320/github/Claudia-Halibut/project/data/genome/"
-reads_dir="/mmfs1/gscratch/scrubbed/sr320/RRBS-run2/raw-data/"
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+genome_folder="../data/genome/"
+reads_dir="/home/shared/16TB_HDD_01/fish546/data/RRBS-run2/raw-data/"
 
 
 find ${reads_dir}*_R1.fq.gz \
 | xargs basename -s _R1.fq.gz | xargs -I{} ${bismark_dir}/bismark \
 --path_to_bowtie ${bowtie2_dir} \
 -genome ${genome_folder} \
--p 4 \
-- u 10000 \
--score_min L,0,-0.6 \
+-p 8 \
+-u 10000 \
+-score_min L,0,-0.8 \
 --non_directional \
 -1 ${reads_dir}{}_R1.fq.gz \
 -2 ${reads_dir}{}_R2.fq.gz \
