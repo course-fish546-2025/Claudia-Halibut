@@ -6,11 +6,13 @@ editor: visual
 ---
 
 4/9/2025 Objective: Installing Kallisto and running DESeq2
+
 ```{bash}
 ## the following code downloads and runs the kallisto software
 
 /home/shared/kallisto/kallisto
 ```
+
 ```{bash}
 ## check working directory
 pwd
@@ -24,6 +26,7 @@ pwd
 cd data/
 curl --insecure -O https://gannet.fish.washington.edu/seashell/bu-github/nb-2023/Cgigas/data/rna.fna
 ```
+
 ```{bash}
 ## calling on the rna file, while renaming it under cgigas
 
@@ -32,6 +35,7 @@ index -i \
 data/cgigas_roslin_rna.index \
 data/rna.fna
 ```
+
 ```{bash}
 ## the following code will download the sequence reads 
 cd data 
@@ -40,6 +44,7 @@ wget --recursive --no-parent --no-directories \
 --accept '*.fastq.gz' \
 https://gannet.fish.washington.edu/seashell/bu-github/nb-2023/Cgigas/data/nopp/
 ```
+
 ```{bash}
 ## check directory and print
 
@@ -60,6 +65,7 @@ quant -i ../data/cgigas_roslin_rna.index \
 -t 40 \
 --single -l 100 -s 10 ../data/{}_L001_R1_001.fastq.gz
 ```
+
 ```{bash}
 ## runs the abundance_estimates_to_matrix.pl script from the Trinity RNA-seq assembly software package to create a gene expression matrix from kallisto output files
 #NOTE: Use ../output/kallisto_01 as the output directory and prefix for the gene expression matrix file
@@ -110,6 +116,7 @@ library(data.table)
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 ```
+
 ```{r}
 getwd()
 ```
@@ -151,6 +158,7 @@ deseq2.dds <- DESeq(deseq2.dds)
 deseq2.res <- results(deseq2.dds)
 deseq2.res <- deseq2.res[order(rownames(deseq2.res)), ]
 ```
+
 ```{r}
 ## stop here for the night and assess data  results tomorrow. 4/10/2025
 
@@ -158,16 +166,19 @@ deseq2.dds <- DESeq(deseq2.dds)
 deseq2.res <- results(deseq2.dds)
 deseq2.res <- deseq2.res[order(rownames(deseq2.res)), ]
 ```
+
 ```{r}
 
 head(deseq2.res)
 ```
+
 ```{r}
 ## Count number of hits with adjusted p-value less then 0.05
 #NOTE: 607 condition desicated vs 6 control?? 
 
 dim(deseq2.res[!is.na(deseq2.res$padj) & deseq2.res$padj <= 0.05, ])
 ```
+
 ```{r}
 ##Decipher this 
 
@@ -183,13 +194,10 @@ points(tmp.sig$baseMean, tmp.sig$log2FoldChange, pch=20, cex=0.45, col="red")
 # 2 FC lines
 abline(h=c(-1,1), col="blue")
 ```
+
 ```{r}
 #sent file to output, but double check tomorrow
 
 setwd("~/Claudia-Halibut/assignments /output")
 write.table(tmp.sig, "output/DEGlist.tab", row.names = T)
 ```
-
-
-
-
