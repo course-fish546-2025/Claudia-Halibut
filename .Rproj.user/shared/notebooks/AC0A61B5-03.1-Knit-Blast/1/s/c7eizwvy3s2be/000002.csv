@@ -1,0 +1,27 @@
+"0","##make sure the directory is where it should be before running more code
+
+cd /home/shared/8TB_HDD_02/cberry1/blastdb
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+
+##moves the fasta file with mv() and added ""2025_01"" as an identifier to allow for type identification. gunzip() decompresses files
+
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2025_01.fasta.gz
+
+gunzip -k uniprot_sprot_r2025_01.fasta.gz
+
+##could add '../blastdb' to the ls function, but already in the desired directory, so only ls
+
+ls
+"
+"2","  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0"
+"2","  0 88.6M    0  187k    0     0   301k      0  0:05:01 --:--:--  0:05:01  300k"
+"2"," 26 88.6M   26 23.2M    0     0  14.9M      0  0:00:05  0:00:01  0:00:04 14.9M"
+"2"," 63 88.6M   63 56.5M    0     0  22.0M      0  0:00:04  0:00:02  0:00:02 22.0M"
+"2","100 88.6M  100 88.6M    0     0  25.7M      0  0:00:03  0:00:03 --:--:-- 25.7M
+"
+"1","uniprot_sprot_r2025_01.fasta
+uniprot_sprot_r2025_01.fasta.gz
+"

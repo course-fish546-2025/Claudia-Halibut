@@ -1,0 +1,14 @@
+"0","
+##print the first few (determined number) of lines from the following document in designated directory
+
+pwd
+
+head -2 output/Ab_4-uniprot_blastx.tab
+
+wc -l output/Ab_4-uniprot_blastx.tab
+"
+"1","/home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments
+solid0078_20110412_FRAG_BC_WHITE_WHITE_F3_QV_SE_trimmed_contig_3	sp|O42248|GBLP_DANRE	82.456	171	30	0	1	513	35	205	2.83e-103	301
+solid0078_20110412_FRAG_BC_WHITE_WHITE_F3_QV_SE_trimmed_contig_5	sp|Q08013|SSRG_RAT	75.385	65	16	0	3	197	121	185	1.41e-28	104
+765 output/Ab_4-uniprot_blastx.tab
+"

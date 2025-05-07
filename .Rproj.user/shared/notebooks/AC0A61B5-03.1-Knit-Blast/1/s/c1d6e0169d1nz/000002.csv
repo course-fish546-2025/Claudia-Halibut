@@ -1,0 +1,22 @@
+"0","##curl() Retrieves downloadable NCBI data (via URL) from NCBI website and tar() manipulating the data
+
+cd /home/shared/8TB_HDD_02/cberry1/applications
+pwd
+
+curl -O https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.16.0+-x64-linux.tar.gz
+
+tar -xf ncbi-blast-2.16.0+-x64-linux.tar.gz"
+"1","/home/shared/8TB_HDD_02/cberry1/applications
+"
+"2","  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0"
+"2","  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0"
+"2","  5  245M    5 13.8M    0     0  10.4M      0  0:00:23  0:00:01  0:00:22 10.4M"
+"2"," 22  245M   22 55.0M    0     0  24.0M      0  0:00:10  0:00:02  0:00:08 23.9M"
+"2"," 40  245M   40 99.7M    0     0  30.2M      0  0:00:08  0:00:03  0:00:05 30.2M"
+"2"," 59  245M   59  145M    0     0  33.8M      0  0:00:07  0:00:04  0:00:03 33.8M"
+"2"," 77  245M   77  190M    0     0  35.9M      0  0:00:06  0:00:05  0:00:01 38.3M"
+"2"," 96  245M   96  236M    0     0  37.5M      0  0:00:06  0:00:06 --:--:-- 44.6M"
+"2","100  245M  100  245M    0     0  37.8M      0  0:00:06  0:00:06 --:--:-- 45.3M
+"

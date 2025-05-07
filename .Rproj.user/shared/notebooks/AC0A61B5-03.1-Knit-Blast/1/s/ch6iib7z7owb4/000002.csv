@@ -1,0 +1,27 @@
+"0","##the following code runs the sequencing blast from the data directory, re-routes it back into the blastdb, and outputs it into the output folder directory
+
+/ncbi-blast-2.16.0+/bin/blastx \
+
+-query /data/Ab_4denovo_CLC6_a.fa \
+
+-db /home/shared/8TB_HDD_02/cberry1/blastdb/uniprot_sprot_r2025_01 \
+
+-out /output/Ab_4-uniprot_blastx.tab \
+
+-evalue 1E-20 \
+
+-num_threads 1 \
+
+-max_target_seqs 1 \
+
+-outfmt 6
+"
+"2","/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 4: /ncbi-blast-2.16.0+/bin/blastx: No such file or directory
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 5: -query: command not found
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 7: -db: command not found
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 9: -out: command not found
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 11: -evalue: command not found
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 13: -num_threads: command not found
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 15: -max_target_seqs: command not found
+/tmp/RtmplruTu0/chunk-code-4556ac2d651.txt: line 17: -outfmt: command not found
+"

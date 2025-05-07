@@ -1,0 +1,5 @@
+"0","##output the selected lines from the desired data file
+
+/home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx_sep.tab | head -2"
+"2","/tmp/Rtmp5fa7DF/chunk-code-57e345a94749.txt: line 3: /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx_sep.tab: Permission denied
+"

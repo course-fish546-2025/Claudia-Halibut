@@ -1,0 +1,19 @@
+---
+title: "week 05 question set"
+format: html
+editor: visual
+---
+
+```         
+a.**what are SAM/BAM files? What is the difference between to the two?**
+SAM files are for sequence alignments and BAM files are for binary alignment data.Both of which are used for the storing of sequencing reads.
+
+b.**samtoolsis a popular program for working with alignment data. What are three common tasks that this software is used for?**
+The top three commands are: samtools view, samtools sort, and samtools index. 
+
+c.**why might you want to visualize alignment data and what are two program that can be used for this?**
+If I am thinking about this properly then being able to visualize alignment data would be helpful for not only future quality control. It would also helps visualize any patterns. Sure you could run some function like grep, but SEEING is better. I believe NCBI works, which is what I know, but according to the reading you can also potentially use IGV (Integrated Genomic Viewer). I have never visually viewed sequencing data, so I am a little unfamiliar witg some programs.
+
+d.**describe what VCF file is?**
+A Variant Call Format which is a plain-text tab-deliminated document you get after samtools arguments. Supposedly it generates the genotype liklihood for all genome sites.
+```

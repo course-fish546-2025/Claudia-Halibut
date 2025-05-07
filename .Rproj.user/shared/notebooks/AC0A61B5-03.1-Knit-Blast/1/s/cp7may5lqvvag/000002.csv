@@ -1,0 +1,20 @@
+"0","##gather more information on blast and change directory
+
+#redirect file
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output
+
+curl -O -H ""Accept: text/plain; format=tsv"" ""https://rest.uniprot.org/uniprotkb/stream?compressed=true&fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_f%2Cgo%2Cgo_p%2Cgo_c%2Cgo_id%2Ccc_interaction%2Cec%2Cxref_reactome%2Cxref_unipathway%2Cxref_interpro&format=tsv&query=%28%2A%29%20AND%20%28reviewed%3Atrue%29""
+"
+"2","  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0"
+"2","  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0"
+"2","Warning: Failed to create the file 
+Warning: stream?compressed=true&fields=accession%2Creviewed%2Cid%2Cprotein_name
+Warning: %2Cgene_names%2Corganism_name%2Clength%2Cgo_f%2Cgo%2Cgo_p%2Cgo_c%2Cgo_
+Warning: id%2Ccc_interaction%2Cec%2Cxref_reactome%2Cxref_unipathway%2Cxref_inte
+Warning: rpro&format=tsv&query=%28%2A%29%20AND%20%28reviewed%3Atrue%29: File 
+Warning: name too long
+100    10    0    10    0     0      8      0 --:--:--  0:00:01 --:--:--     8
+curl: (23) Failed writing body (0 != 10)
+"
