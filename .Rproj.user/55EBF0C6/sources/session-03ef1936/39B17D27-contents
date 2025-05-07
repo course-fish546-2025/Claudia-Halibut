@@ -1,2 +1,14 @@
+
 project
+
+
+# R studio junk
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+
+project/data/ncbi*
+project/data/gen*
+

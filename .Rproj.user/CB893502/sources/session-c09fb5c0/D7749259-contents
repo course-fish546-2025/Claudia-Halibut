@@ -1,7 +1,4 @@
 
-project
-
-
 # R studio junk
 .Rproj.user
 .Rhistory
@@ -11,4 +8,3 @@ project
 
 project/data/ncbi*
 project/data/gen*
-
