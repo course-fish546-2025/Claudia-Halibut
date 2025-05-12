@@ -1,0 +1,149 @@
+---
+title: "05-Variants"
+format: html
+editor: visual
+---
+
+5/6/2025 Objective: Download alignment files, visualize IGV, and potentially display two feature files
+
+```{r}
+## check directory
+getwd()
+```
+
+```{r, engine='bash'}
+## change directory then call on each alignment file: 19F and Virginica 
+cd /assignments/data
+curl -O https://gannet.fish.washington.edu/seashell/bu-mox/scrubbed/120321-cvBS/19F_R1_val_1_bismark_bt2_pe.deduplicated.sorted.bam 
+curl -O https://gannet.fish.washington.edu/seashell/bu-mox/scrubbed/120321-cvBS/19F_R1_val_1_bismark_bt2_pe.deduplicated.sorted.bam.bai
+
+{r, engine='bash'}          
+cd /assignments/data/ 
+curl -O https://gannet.fish.washington.edu/seashell/bu-mox/data/Cvirg-genome/GCF_002022765.2_C_virginica-3.0_genomic.fa 
+curl -O https://gannet.fish.washington.edu/seashell/bu-mox/data/Cvirg-genome/GCF_002022765.2_C_virginica-3.0_genomic.fa.fai
+```
+
+```{r}
+## apply following code in terminal; Directs samtools to view the documents stored in the data folder directory -- specifically specified below
+
+#NOTE: 1_bismark is your BAM and Virginica is your fasta file
+
+/home/shared/samtools-1.12/samtools \
+tview assignments/data/19F_R1_val_1_bismark_bt2_pe.deduplicated.sorted.bam \
+GCF_002022765.2_C_virginica-3.0_genomic.fa
+```
+
+```{r, engine='bash'}
+## use absolute path directory. F143 fasta file into the data directory
+
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/data
+curl -O https://owl.fish.washington.edu/nightingales/C_gigas/F143n08_R2_001.fastq.gz
+curl -O https://owl.fish.washington.edu/nightingales/C_gigas/F143n08_R1_001.fastq.gz
+```
+
+```{r, engine='bash'}
+## transfer Roslin data [curl()] via URL **add visualization?**
+
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/data
+curl -O https://gannet.fish.washington.edu/panopea/Cg-roslin/cgigas_uk_roslin_v1_genomic-mito.fa 
+curl -O https://gannet.fish.washington.edu/panopea/Cg-roslin/cgigas_uk_roslin_v1_genomic-mito.fa.fai
+curl -O https://gannet.fish.washington.edu/panopea/Cg-roslin/GCF_902806645.1_cgigas_uk_roslin_v1_genomic-mito.gtf
+```
+
+```{r, engine='bash'}
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut
+
+/home/shared/hisat2-2.2.1/hisat2-build \
+  assignments/data/cgigas_uk_roslin_v1_genomic-mito.fa assignments/output/cgigas_uk_roslin_v1_genomic-mito.index
+```
+
+```{r}
+getwd()
+```
+
+```{r, engine='bash'}
+#NOTE: example reference for creating variable that shortens directory links
+
+#WORK_DIR=/home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments
+#echo "Moving into ${WORK_DIR}"
+#cd $WORK_DIR
+
+#/home/shared/hisat2-2.2.1/hisat2 \
+#      $WORK_DIR/output/cgigas_uk_roslin_v1_genomic-mito.index\
+#     -p 4 -1 $WORK_DIR/data/F143n08_R1_001.fastq.gz\
+#     -2 $WORK_DIR/data/F143n08_R2_001.fastq.gz\
+#     -S $WORK_DIR/output/F143_cgigas.sam
+
+#tail -1 output/F143_cgigas.sam
+```
+
+```{r, engine='bash'}
+## keep in mind that every line of code resets to changed directory; the computer isn't that smart. While cd() is not necessary it was added for assurance
+
+## call on the alignment file in the output directory,launch selected threads from the file information in desired document located in data directory, write SAM alignment to the F143 (-S) -- then print the last line
+
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments
+
+/home/shared/hisat2-2.2.1/hisat2 \
+      output/cgigas_uk_roslin_v1_genomic-mito.index\
+     -p 4 -1 data/F143n08_R1_001.fastq.gz\
+     -2 data/F143n08_R2_001.fastq.gz\
+    -S output/F143_cgigas.sam
+
+tail -1 output/F143_cgigas.sam
+```
+
+```{r, engine='bash'}
+## convert SAM to BAM, using 4 additional threads - fixed (as of 4/08/2025 3PM)
+
+## check status and reroute SAM alignment as BAM. Created file but is throwing errors towards end?? (as of 5/09/2025 9AM)
+
+pwd
+/home/shared/samtools-1.12/samtools view -@ 4 -bS output/F143_cgigas.sam > output/F143_cgigas.bam
+```
+
+```{r, engine='bash'}
+## sort the BAM file, using 4 additional threads, but be careful of the BAM (output located) file 
+
+/home/shared/samtools-1.12/samtools sort -@ 4 \
+output/F143_cgigas.bam -o output/F143_cgigas_sorted.bam
+
+## index the sorted BAM file (multi-threading is not applicable to this operation)
+#NOTE: bash does not do multi-thread compared to other languages 
+
+/home/shared/samtools-1.12/samtools index \
+output/F143_cgigas_sorted.bam
+
+# Return is "merging from 0 files and 4 in-memory blocks.." because file is in memory not external file, but code works?
+```
+```{r, engine='bash'}
+#NOTE: be careful of next line spacing. And I stopped it after 10 GB
+
+/home/shared/bcftools-1.14/bcftools mpileup --threads 4 --no-BAQ \
+--fasta-ref data/cgigas_uk_roslin_v1_genomic-mito.fa \
+output/F143_cgigas_sorted.bam > output/F143_mpileup_output.txt
+```
+
+```{r, engine='bash'}
+## print the end of the F143 document
+
+tail output/F143_mpileup_output.txt
+```
+
+```{r, engine='bash'}
+## display the F143 output from text document then move it to output folder. I stopped the download early, which could very likely cause errors.
+
+cat output/F143_mpileup_output.txt \
+| /home/shared/bcftools-1.14/bcftools call -mv -Oz \
+> output/F143_mpile.vcf.gz
+```
+
+```{r, engine='bash'}
+## find the patterns within the "" then pipe and print outcome. Add more details (as of 5/12/2025)
+
+zgrep "^##" -v output/F143_mpile.vcf.gz | \
+awk 'BEGIN{OFS="\t"} {split($8, a, ";"); print $1,$2,$4,$5,$6,a[1],$9,$10}' | head
+
+```
+
+
