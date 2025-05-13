@@ -1,0 +1,27 @@
+---
+title: "week 06 question set"
+format: html
+editor: visual
+---
+
+````         
+```
+a.**What is Quarto?**
+According to the reading quarto is an open-source scientific and technical publishing system that is a document converter. 
+
+b.**How do you make columns using Revealjs in Quarto Presentations?**
+Not sure I fully understand right now, but you would type something like:
+:::{.columns}
+::: {.column width="40%"}
+Left column
+:::
+::: {.column width="60%"}
+Right column
+
+c.**How would you change the appearance of slides using Revealjs in Quarto Presentations?**
+In the quarto documents header you can pick from eleven pre-downloaded "themes" that the software has already installed. Anything past that and you would need to specify in your code for any colors of plots or onward.
+
+d.**What has been the biggest constraint working on your own research project in the past week?**
+I quite literally know little to nothing about what I am doing. Which on the positive side leaves a lot of room for growth. The other end of that is doing a lot of "what does this mean"; which I love, but can be challenging. More often than not I feel a little behind in the sense that I lack the same knowledge as others in this class working on their projects, but I am trying to learn, so that is all that matters! My biggest constraint is my own knowledge, plus a bit of processing power. 
+```
+````
