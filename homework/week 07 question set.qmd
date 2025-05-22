@@ -1,0 +1,23 @@
+---
+title: "week 07 question set"
+format: html
+editor: visual
+---
+
+```{}
+a.**What is your current grade in the class? How many issues are open in our research repository?**
+  If I caluclated my grade properly then I am sitting at ~80% almost -- based off 75 out of 95 points. I havent scaled anything yet. I am missing some points from assignments for week 3 and 5. Which is what gave me some trouble, so I anticipated that to some degree.
+
+b.**Re-reading this week’s reading, what are 2 things that resonate with you now that made little practical sense in week 2. What is one aspect that you still wonder about or is unclear?**
+Okay now that I have started working with my project samples; the section on bioinformatics (pg. 749) and differential methylation analysis (pg. 751) provides me with a bit more insight than it did during week two. Honorable mention goes to the software and resources list on page 750 that has lived rent free in my head since the day I first saw it. Its been so helpful.
+
+c.**What is epigenetics and how could it relate to your own research project?**
+Epigenetics notes changes from parent species to their offspring via gene expression in the DNA sequence of an organism. Mmm, I do not focus of heritable changes, but I do look at gene expression, so in that capacity it relates to my own project because epigenetics does also focus on the modification of certain chemical groups within a genome; And that is where there is overlap with my project.
+
+d.**Describe what a GFF file is?**
+  .GFF is a Genome Feature File; which put simply is a file format in bioinformatics that is used to store information regarding the genome annotations in whatever sequences you might have.
+  
+e.**What are two ways describing CG motifs could have value?**
+  I think that CG motifs are beneficial for understanding the overall vulnerability or life history of a fish. There is a lot to be learned from DNA. Especially when you dive into the disease association and DNA methylation patterns of any organism (personal bias yes). Being able to link the vulnerability to disease of any species, as well as monitoring gene expression through methylation, is a powerhouse within itself regarding value. If any argues differently... ask them why we do blood tests on humans. 
+
+```
