@@ -1,0 +1,19 @@
+---
+title: "week 08 question set"
+format: html
+editor: visual
+---
+
+```{r}
+a.**What is a genomic range and what 3 types of information do you need for a range?**
+A genomic range is a way to display the start or end regions of a given genome.Although the textbook describes it as integer intervals that represent a subsequent of consecutive positions. The three pieces of informations are typically chromosome names, start position, and the end posistion.
+
+b.**What does 0-based and 1-based refer to? What are the advantages and disadvantages of each?**
+This refers to two flavors of range systems used to format the ranges -- both coordinate systems -- 0-based is with a half-closed half-open intervals; whereas 1-based is a fully closed intervals in the coordinate system
+
+c.**What is the value of BEDtools over the bioconductor package GenomicRange?**
+GenomicRange has a cost associated with loading large sets of data into the memory at once. Whereas using the command line of BEDtools to read the files is faster.
+  
+d.**Describe one subcommand of the BEDtools suite as well as a practical use case.**
+  If I understand this question correctly then I would describe the bedtools miltiinter. Which lets you take multiple file inputs and return whether each overlaps with a set feature. Personally I believe that could be useful. Although it seems somewhat similar (probably not similar at all) to bedtools sort
+```
