@@ -1,0 +1,95 @@
+---
+title: "08-GR-BEDtools"
+format: html
+editor: visual
+---
+
+```{bash}
+#NOTE: since I cannot run the chunks for now then I am writing baseline for the programs until it can be run and the kinks fixed. Email Dr. Roberts on 5/30
+```
+
+```{r}
+## basic creation of genomic range on R platform 
+
+## loading the library
+library(GenomicRanges)
+install.packages("Iranges")
+install.packages("BiocManager")
+BiocManager::install("GenomicRanges")
+
+## creating a GenomicRanges object
+gr <- GRanges(seqnames = "chr1", 
+              ranges = IRanges(start = c(100, 200), end = c(150, 250)))
+
+## printing the object
+print(gr)
+```
+
+```{bash}
+## check directory before running next block of code // still can't run 5/29
+pwd
+```
+
+```{r, engine='bash'}
+## pulling upon the 19F files located in the data directory
+
+cd data 
+curl -O https://gannet.fish.washington.edu/seashell/bu-mox/scrubbed/120321-cvBS/19F_R1_val_1_bismark_bt2_pe.deduplicated.sorted.bam 
+curl -O https://gannet.fish.washington.edu/seashell/bu-mox/scrubbed/120321-cvBS/19F_R1_val_1_bismark_bt2_pe.deduplicated.sorted.bam.bai
+
+## pulls on the virginica genomic bed file located in the data folder
+
+cd ../data 
+curl -O https://eagle.fish.washington.edu/Cvirg_tracks/C_virginica-3.0_Gnomon_genes.bed
+```
+
+```{bash}
+## convert the BAM file into a BED file, but re-print directory, and check bedtools pathway in shared directory. Big file, do not index and ignore in Git
+
+pwd
+/home/shared/bedtools2/bin/bedtools bamtobed \ 
+-i data/19F_R1_val_1_bismark_bt2_pe.deduplicated.sorted.bam \ 
+> output/08-19F.bed
+```
+
+```{bash}
+## bedtools coverage providing standard feedback. Re-route if needed.
+#NOTE: The number of features in B that overlapped (by at least one base pair) the A interval.The number of bases in A that had non-zero coverage from features in B. The length of the entry in A. The fraction of bases in A that had non-zero coverage from features in B
+
+
+/home/shared/bedtools2/bin/bedtools coverage \
+-a data/C_virginica-3.0_Gnomon_genes.bed \
+-b output/08-19F.bed \
+> output/08-gene-19F-coverage.out
+```
+
+```{bash}
+## use tool to grab a bed file of Transposable Elements and lncRNAs with below code. Create intersect. Write personal notes, but double check link functions when chance arrives
+
+pwd
+cd data
+curl -O http://owl.fish.washington.edu/halfshell/genomic-databank/cgigas_uk_roslin_v1_gene.gff 
+curl -O http://owl.fish.washington.edu/halfshell/genomic-databank/cgigas_uk_roslin_v1_rm.te.bed 
+curl -O http://owl.fish.washington.edu/halfshell/genomic-databank/cgigas_uk_roslin_v1_lncRNA.gff
+
+
+## make sure to check the location of the bedtools2 location within shared drive. Output feature data and return beginning of output file. Re-check directory.
+
+pwd
+/home/shared/bedtools2/bin/bedtools intersect \
+-a data/cgigas_uk_roslin_v1_gene.gff \
+-b data/cgigas_uk_roslin_v1_rm.te.bed \
+> output/08-gene-TE-intersect.out
+
+head -2 output/08-gene-TE-intersect.out
+```
+
+```{bash}
+## search for overlapping features with bedtools features. In the event that no feature in B overlaps with A, Closest will report literally the nearest feature in B.
+
+pwd
+/home/shared/bedtools2/bin/bedtools closest \
+-a ../data//cgigas_uk_roslin_v1_lncRNA.gff\
+-b ./data/cgigas_uk_roslin_v1_gene.gff \
+> ../output/08-lnc-gene-closet.out
+```
