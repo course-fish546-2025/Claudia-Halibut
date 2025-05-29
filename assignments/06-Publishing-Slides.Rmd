@@ -1,0 +1,50 @@
+---
+title: "Claudia RMarkdown Presentation"
+format: beamer
+output:
+  ioslides_presentation: default
+  beamer_presentation:
+    theme: sky
+    slide_level: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+## Goal
+
+- Development of a Non-Lethal Genetic Technique for Determining Age of Pacific Halibut
+
+NOTE: Aging is typically conducted via the extraction of a fishes otolith. Which ultimately ends up contributing largely towards species mortality rates -- since you have to bonk (x_x) the fish
+
+## Initial Methods
+
+- Fin clips are collected through fishery independent set-line surveys (FISS). Each sample has been double aged already by the International Pacific Halibut Commission (IPHC)
+
+- DNA gets extracted and pooled into libraries containing only 48 samples. Done in batches to achieve 20x coverage with each pool
+
+- Code gets written for trimming, alignments, methylation extraction, and more for initial clean-up and quality checks 
+
+- Once this is complete I will start the modeling  process and identification of any CpG sites  
+
+## Slide with Baseline R Code
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+
+Using project sample code as an example. 
+This is an example of what I type into the server for TrimGalore
+
+trim_galore --output_dir trimgalore-out --fastqc_args \
+"--outdir fastqc-out" \
+  --basename ${SAMPLE2} --non_directional --rrbs --paired \
+  --2colour=20 --keep \
+  umi-add/${SAMPLE2}_R1.fq.gz umi-add/${SAMPLE2}_R2.fq.gz
+```
+
+## Initial Output
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## add code with document output
+plot()
+```
+
