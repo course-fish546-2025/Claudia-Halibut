@@ -12,3 +12,6 @@ project
 project/data/ncbi*
 project/data/gen*
 
+assignments/output/cgigas*
+assignments/output/F143*
+assignments/output/kallisto*
