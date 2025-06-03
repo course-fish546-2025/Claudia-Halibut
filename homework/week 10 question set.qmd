@@ -1,0 +1,18 @@
+---
+title: "week 10 question set"
+format: html
+editor: visual
+---
+
+```{r}
+a.**Looking back on the quarter what are two things you were not expecting to learn but did, glad you did, and how would you implement this knowledge beyond this class?**
+Not expecting to learn - hyak and knitting
+Glad it was learned - knitting and learning how to work in the terminal of R from Hyak 
+I definitely see myself using the skills we learned from knitting a document, which took me forever, to display my project in the future
+
+b.**Rank the following from 1-5, with 1 being your best friend and 5 being your enemy (raven, rstudio, knitr, bash, github)**
+So ready for this moment -- left is 1 and right is upward of 5: rstudio, raven, bash, github, knitr (kicked my butt for like THREE weeks, grateful but there is beef now)
+
+c.**As part of your research project you must of learned something beyond methods. What is the most important biological finding from your work to date? Assuming you follow this line of research what is your long term goal of what you expect to learn about biology, ecology, or the environment?**
+We just started processing the samples, plus I have yet to write the methylation extraction code, so there isnt a discovery. However, once we start analysis on the CpG site. It will be great because it presents an alternate non-lethal method to aging the species. Lower mortality rates and the double aging done on the samples beforehand will provide me with the opportunity to truly ensure the technique I develop works accurately
+```
