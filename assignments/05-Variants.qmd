@@ -23,7 +23,7 @@ curl -O https://gannet.fish.washington.edu/seashell/bu-mox/data/Cvirg-genome/GCF
 curl -O https://gannet.fish.washington.edu/seashell/bu-mox/data/Cvirg-genome/GCF_002022765.2_C_virginica-3.0_genomic.fa.fai
 ```
 
-```{r}
+```{r, engine='bash'}
 ## apply following code in terminal; Directs samtools to view the documents stored in the data folder directory -- specifically specified below
 
 #NOTE: 1_bismark is your BAM and Virginica is your fasta file
@@ -58,6 +58,7 @@ cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut
 ```
 
 ```{r}
+## check directory as periodical task
 getwd()
 ```
 
@@ -66,7 +67,7 @@ getwd()
 
 #WORK_DIR=/home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments
 #echo "Moving into ${WORK_DIR}"
-#cd $WORK_DIR
+#testing out cd to $WORK_DIR actual code is below
 
 #/home/shared/hisat2-2.2.1/hisat2 \
 #      $WORK_DIR/output/cgigas_uk_roslin_v1_genomic-mito.index\
@@ -98,6 +99,8 @@ tail -1 output/F143_cgigas.sam
 
 ## check status and reroute SAM alignment as BAM. Created file but is throwing errors towards end?? (as of 5/09/2025 9AM)
 
+## should successfully be re-routed 
+
 pwd
 /home/shared/samtools-1.12/samtools view -@ 4 -bS output/F143_cgigas.sam > output/F143_cgigas.bam
 ```
@@ -116,6 +119,7 @@ output/F143_cgigas_sorted.bam
 
 # Return is "merging from 0 files and 4 in-memory blocks.." because file is in memory not external file, but code works?
 ```
+
 ```{r, engine='bash'}
 #NOTE: be careful of next line spacing. And I stopped it after 10 GB
 
@@ -133,17 +137,37 @@ tail output/F143_mpileup_output.txt
 ```{r, engine='bash'}
 ## display the F143 output from text document then move it to output folder. I stopped the download early, which could very likely cause errors.
 
+export PATH="/home/shared/bcftools-1.14/bcftools:$PATH"
+echo "NEW PATH: ${PATH}"
+
 cat output/F143_mpileup_output.txt \
 | /home/shared/bcftools-1.14/bcftools call -mv -Oz \
 > output/F143_mpile.vcf.gz
 ```
 
 ```{r, engine='bash'}
-## find the patterns within the "" then pipe and print outcome. Add more details (as of 5/12/2025)
+## find the patterns within the "" then pipe and print outcome. As well as display the lines which doesn't have the expression present in it Add more details and figure out "broken pipe error" (as of 5/12/2025)
 
 zgrep "^##" -v output/F143_mpile.vcf.gz | \
 awk 'BEGIN{OFS="\t"} {split($8, a, ";"); print $1,$2,$4,$5,$6,a[1],$9,$10}' | head
 
 ```
 
+```{bash}
+pwd
+## attempted to type code that could either run it in the chunk or export to computer
 
+#bcftools view -o F143_mpile.vcf.gz #attempt at viewing VCF file through code chunk
+#bcftools view -O z -o F143_mpile.vcf.gz #attempt at viewing VCF file through terminal 
+# attempt to call on VCF file prior to attempting to run via web browser IGV 
+#scp cberry1@raven:/home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output/F143_mpile.vcf.gz ~/Downloads/"2025 UW Course"
+```
+
+```{r, engine='bash'}
+## figure out a way to display the IGV. BCF tools is present. As of 5/25/2025 I added --ploidy ,but I still cannot get it working, so temporarily moving on
+
+/home/shared/bcftools-1.14/bcftools call \
+-v -c --ploidy output/F143_mpile.vcf.gz \
+> output/F143_mpile_calls.vcf
+
+```
