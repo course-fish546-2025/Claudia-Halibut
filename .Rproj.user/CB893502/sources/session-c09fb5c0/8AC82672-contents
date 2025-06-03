@@ -1,4 +1,0 @@
-./srlab/programs/ncbi-datasets-v13.34.0/datasets \
-download genome accession GCF_022539355.2 \
---include gff3,rna,cds,protein,genome,seq-report
-
