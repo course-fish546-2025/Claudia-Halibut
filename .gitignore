@@ -3,7 +3,8 @@ project
 
 
 # R studio junk
-.Rproj.user
+.Rproj.user*
+.Rproj.user/shared*
 .Rhistory
 .RData
 .Ruserdata
