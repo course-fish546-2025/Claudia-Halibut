@@ -9,10 +9,7 @@ project
 .RData
 .Ruserdata
 
-
-project/data/ncbi*
-project/data/gen*
-
-assignments/output/*
 assignments/output/kallisto_*
-assignments/output/*
+assignments/output/F143*
+assignments/output/cgigas*
+assignments/output/Ab*
