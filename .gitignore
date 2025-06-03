@@ -4,12 +4,13 @@ project
 
 # R studio junk
 .Rproj.user/*
+.Rproj.user/55EBF0C6*
 .Rproj.user/shared/*
 .Rhistory
 .RData
 .Ruserdata
 
-assignments/output/kallisto_*
+assignments/output/kallisto_01/*
 assignments/output/F143*
 assignments/output/cgigas*
 assignments/output/Ab*
