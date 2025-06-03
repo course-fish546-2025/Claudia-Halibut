@@ -1,1 +1,13 @@
 Ab_4-uniprot_blastx_sep.tab
+.Rproj.user/*
+.Rproj.user/shared/*
+.Rhistory
+.RData
+.Ruserdata
+
+assignments/data*
+assignments/output*
+assignments/output/kallisto_*
+assignments/output/F143_*
+assignments/output/cgigas_*
+assignments/output/Ab_*

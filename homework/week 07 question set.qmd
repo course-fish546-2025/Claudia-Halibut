@@ -15,7 +15,7 @@ c.**What is epigenetics and how could it relate to your own research project?**
 Epigenetics notes changes from parent species to their offspring via gene expression in the DNA sequence of an organism. Mmm, I do not focus of heritable changes, but I do look at gene expression, so in that capacity it relates to my own project because epigenetics does also focus on the modification of certain chemical groups within a genome; And that is where there is overlap with my project.
 
 d.**Describe what a GFF file is?**
-  .GFF is a Genome Feature File; which put simply is a file format in bioinformatics that is used to store information regarding the genome annotations in whatever sequences you might have .
+  .GFF is a Genome Feature File; which put simply is a file format in bioinformatics that is used to store information regarding the genome annotations in whatever sequences you might have available 
   
 e.**What are two ways describing CG motifs could have value?**
   I think that CG motifs are beneficial for understanding the overall vulnerability or life history of a fish. There is a lot to be learned from DNA. Especially when you dive into the disease association and DNA methylation patterns of any organism (personal bias yes). Being able to link the vulnerability to disease of any species, as well as monitoring gene expression through methylation, is a powerhouse within itself regarding value. If any argues differently... ask them why we do blood tests on humans. 
