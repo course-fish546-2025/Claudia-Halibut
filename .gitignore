@@ -3,8 +3,8 @@ project
 
 
 # R studio junk
-.Rproj.user*
-.Rproj.user/shared*
+.Rproj.user/*
+.Rproj.user/shared/*
 .Rhistory
 .RData
 .Ruserdata
@@ -13,6 +13,6 @@ project
 project/data/ncbi*
 project/data/gen*
 
-assignments/output/cgigas*
-assignments/output/F143*
-assignments/output/kallisto*
+assignments/output/*
+assignments/output/kallisto_*
+assignments/output/*
