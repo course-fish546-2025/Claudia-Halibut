@@ -4,7 +4,7 @@ output: html_document
 date: "2025-05-03"
 author: Steven Roberts
 ---
-
+#study code this weekend (as of 5/0/2025)
 
 ```{bash}
 cd ../data
