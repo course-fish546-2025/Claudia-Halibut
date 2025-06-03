@@ -16,7 +16,7 @@ output:
 pwd
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 ##curl() Retrieves downloadable NCBI data (via URL) from NCBI website and tar() manipulating the data
 
 cd /home/shared/8TB_HDD_02/cberry1/applications
@@ -45,7 +45,7 @@ cd /home/shared/8TB_HDD_02/cberry1/applications
 pwd
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 ##make sure the directory is where it should be before running more code
 
 cd /home/shared/8TB_HDD_02/cberry1/blastdb
@@ -62,7 +62,7 @@ gunzip -k uniprot_sprot_r2025_01.fasta.gz
 ls
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 ##the head command will allow for viewing of the first few lines in the UniProt document.
 
 #NOTE: the \* symbol acts as a wildcard with any files matching the typed file name
@@ -71,11 +71,11 @@ cd /home/shared/8TB_HDD_02/cberry1/blastdb
 head uni*
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', echo=FALSE}
 pwd
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 ##the following code provides details about what the document does as well as the function time for DNA sequences
 
 #NOTE: the '\\' acts as an indicator to connect the lines of code, so while it is displayed as separate lines, it is all one
@@ -93,7 +93,7 @@ pwd
 pwd
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 ##sends the following "Ab" fasta file to the data folder while grabbing the query sequences via curl()
 
 curl https://eagle.fish.washington.edu/cnidarian/Ab_4denovo_CLC6_a.fa \
@@ -101,11 +101,11 @@ curl https://eagle.fish.washington.edu/cnidarian/Ab_4denovo_CLC6_a.fa \
 -k >> data/Ab_4denovo_CLC6_a.fa
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', echo=FALSE}
 pwd
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE, echo=TRUE}
 ##retrieves the requested info from the attached data set, print it, and the echo() function lets you print out a separate question 
 
 head data/Ab_4denovo_CLC6_a.fa
@@ -117,7 +117,7 @@ grep -c "\>" data/Ab_4denovo_CLC6_a.fa
 pwd
 ```
 
-```{bash}
+```{bash, eval=FALSE}
 ##the following code runs the sequencing blast from the data directory, re-routes it back into the blastdb, and outputs it into the output folder directory
 
 /ncbi-blast-2.16.0+/bin/blastx \
@@ -137,7 +137,7 @@ pwd
 -outfmt 6
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 ##the head function writes in the first few lines from the set data file
 
 head -2 output/Ab_4-uniprot_blastx.tab
@@ -147,11 +147,9 @@ wc -l output/Ab_4-uniprot_blastx.tab
 #NOTE: the below code has {{}}. This allows for better data manipulation in the following-up code
 ```
 
-``` {{r, engine='bash'}}
-curl -O "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+organism_id:9606"
-```
+`{{r, engine='bash', eval=TRUE}} curl -O "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/search?query=reviewed:true+AND+organism_id:9606"`
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 ##gather more information on BLAST file and change directory
 
 #redirect file
@@ -160,27 +158,27 @@ cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output
 curl -O -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?compressed=true&fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_f%2Cgo%2Cgo_p%2Cgo_c%2Cgo_id%2Ccc_interaction%2Cec%2Cxref_reactome%2Cxref_unipathway%2Cxref_interpro&format=tsv&query=%28%2A%29%20AND%20%28reviewed%3Atrue%29"
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 ##print the first few (number is the determined lines) lines from the following document in designated directory
 
 head -2 output/Ab_4-uniprot_blastx.tab
 wc -l output/Ab_4-uniprot_blastx.tab
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 ##the following code states that any time the system runs across a pipes to replace it with the indicated value/character. Followed by an output
 
 pwd
 tr '|' '\t' < /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx.tab | head -5
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 ##output the first two lines from the called upon data file
 
 /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments/output/Ab_4-uniprot_blastx_sep.tab | head -2
 ```
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 ##the following code states to translate the pipe then out the resuls into a dedicated file
 
 cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/assignments
@@ -192,7 +190,7 @@ tr '|' '\t' < output/Ab_4-uniprot_blastx.tab \
 
 The following code joins the two tables to one another, but code is invalidated since only one tab is created.
 
-```{r}
+```{r,eval=FALSE}
 library(tidyverse)
 install.packages("kableExtra")
 library(kableExtra)
