@@ -5,7 +5,7 @@ editor: visual
 ---
 
 ```{bash}
-#NOTE: As of 5/28/2025 still not able to get code chunks running on assignments 5,6, and 7. Presumably due to the .gitignore file, try sorting tomorrow. Below code is a baseline to run once it all functions 
+## as of 6/12/2025 the chunks are running but their are issues with the fastq file load. Moving on temporarily because I lack a fasta file to input and the fastq file is throwing issues
 ```
 
 ```{bash}
@@ -14,32 +14,39 @@ pwd
 ```
 
 ```{r}
-## call on and install necessary library (Seqinr)
-
+# Load necessary libraries
+library(ShortRead)
+install.packages("BiocManager")
+BiocManager::install("ShortRead")
+install.packages("seqinr")
 library(seqinr)
-install.package(seqinr)
 
-## replace 'input.fasta' with the name of your multi-sequence fasta file
-#NOTE:E2 is tester file
+# Define input and output file paths
+input_file <- "../project/trimgalore-out/E2_T2_F1_val_2.fq.gz"
+output_fasta <- "../output/selected_sequences.fasta"
+#sequences <- read.fasta(input_file)
 
-inputf <- "E2_T2_F1_val_2.fq.gz"
-sequences <- read.fasta(inputf)
-```
+# Read the entire FASTQ file
+fq <- readFastq(input_file)
 
-```{r}
-## setting the seed for reproducibility ensures that the sequence of random numbers generated in your code will be the same every time you run it
+# Set seed for reproducibility
+set.seed(42)
 
-set.seed(30)
+# Define number of sequences to select
+number_of_sequences_to_select <- 10
 
-number_of_sequences_to_select <- 20
+# Check if there are enough sequences
+if (length(sequences) < number_of_sequences_to_select) {
+  warning("There are fewer than 10 sequences in the FASTQ file. All sequences will be selected.")
+  number_of_sequences_to_select <- length(fq)
+}
 
-## if the length of the sequences is less than the desired number then output the warning listed below
+# Sample sequences
+selected_indices <- sample(length(fq), number_of_sequences_to_select)
+selected_sequences <- fq[selected_indices]
 
-if (length(sequences) < number_of_sequences_to_select ) { warning("There are fewer than 10 sequences in the fasta file. All sequences will be selected.")
-  number_of_sequences_to_select <- length(sequences) }
-
-selected_indices <- sample(length(sequences), number_of_sequences_to_select)
-selected_sequences <- sequences[selected_indices]
+# Write selected sequences to a FASTA file
+writeFasta(sread(selected_sequences), file = output_fasta)
 ```
 
 ```{r}
@@ -48,7 +55,7 @@ selected_sequences <- sequences[selected_indices]
 
 output_f <- "output/E2outf10.fasta"
 write.fasta(selected_sequences, names(selected_sequences), output_f, open = "w")
-#tail -2 output/E2outf10.fasta
+tail -2 output/E2outf10.fasta
 ```
 
 ```{bash}
