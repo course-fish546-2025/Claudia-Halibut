@@ -1,50 +1,108 @@
 ---
-title: "Claudia RMarkdown Presentation"
+title: "Claudia Mini Project Presentation"
 format: beamer
 output:
   ioslides_presentation: default
   beamer_presentation:
     theme: sky
     slide_level: 2
+  slidy_presentation: default
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
-## Goal
 
-- Development of a Non-Lethal Genetic Technique for Determining Age of Pacific Halibut
+## Objectives
+
+- Development of a non-lethal genetic technique for determining age of pacific halibut using fin tissue samples.A method based on the identification of DNA methylation patterns associated with age through development of an age estimation model. This method represents an alternative to traditional aging methods, but not a replacement, the ultimate goal is to improve stock assessment by increasing the number of aged individuals used for age composition of the species.
 
 NOTE: Aging is typically conducted via the extraction of a fishes otolith. Which ultimately ends up contributing largely towards species mortality rates -- since you have to bonk (x_x) the fish
 
-## Initial Methods
+## Methodology
 
 - Fin clips are collected through fishery independent set-line surveys (FISS). Each sample has been double aged already by the International Pacific Halibut Commission (IPHC)
+- DNA gets extracted and pooled into libraries containing only 48 samples each with the goal of achieving 20x coverage with each pool
+- Methylation patterns will be investigated using genome-wide reduced representation bisulfite sequencing. A method that should be cost-efficient due to its potential for high read depth from a well-defined set of genomic regions
+- Age-associated DNA mthylation patterns will be modelled to generate epigenetic age predictors 
 
-- DNA gets extracted and pooled into libraries containing only 48 samples. Done in batches to achieve 20x coverage with each pool
+## Reasoning
 
-- Code gets written for trimming, alignments, methylation extraction, and more for initial clean-up and quality checks 
+- For most groundfish species age has traditionally been estimated manually by counting the number of annuli present in the otoliths. A method IPHC has used since around 1914. Otolith based methods are accurate but is a lethal aging technique
 
-- Once this is complete I will start the modeling  process and identification of any CpG sites  
+## Bash Code Used for Initial Analysis
 
-## Slide with Baseline R Code
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## Initial software needed gets downloaded to the system
+## Which looks something like below
+
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+
+ OR
+ 
+curl -fsSL 
+https://github.com/FelixKrueger/TrimGalore/archive/0.6.10.tar.gz /
+-o trim_galore.tar.gz 
+tar xvzf trim_galore.tar.gz 
+
+```
+
+## Bash Continued....
 
 ```{r, engine='bash', eval=FALSE, echo = TRUE}
 
-Using project sample code as an example. 
-This is an example of what I type into the server for TrimGalore
+## An example of what is typed into TrimGalore for the raw reads
+## This code simply trims to the system default
 
 trim_galore --output_dir trimgalore-out --fastqc_args \
 "--outdir fastqc-out" \
   --basename ${SAMPLE2} --non_directional --rrbs --paired \
   --2colour=20 --keep \
   umi-add/${SAMPLE2}_R1.fq.gz umi-add/${SAMPLE2}_R2.fq.gz
+  
 ```
 
-## Initial Output
+## Continued... 
 
 ```{r, engine='bash', eval=FALSE, echo = TRUE}
-## add code with document output
-plot()
+
+## Often followed by an alignment to any given reference genome
+
+curl -O 
+https://www.diagenode.com/files/products/kits/
+RRBS_v2_methylated_control.fa
+
+bismark -q --output_dir align-out --pbat --prefix /
+Meth_ctrl genomes -1 trimgalore-out/${as1}_val_1.fq.gz /
+-2 trimgalore-out/${as1}_val_2.fq.gz
+
+
+## results in a file: "Meth_ctrl.E2_T1_C1_val_1_bismark_bt2_pe.bam"
 ```
 
+## Continued... 
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## Next is the deduplication step that reads pairs 
+## aligned at the same genomic coordinates of the reference genome 
+## and carrying the same UMI sequence
+
+samtools sort align-out/Meth_ctrl.E1_T1_C2_val_1_bismark_bt2_pe.bam -
+o Meth_ctrl.E1_T1_C2_val_1_sorted.bam
+
+fumi_tools dedup -i Meth_ctrl.E1_T1_C2_val_1_sorted.bam -o
+Meth_ctrl.E1_T1_C2_val_1_dedup.bam --threads 6 --memory 3G --paired
+
+```
+
+## Follow-up steps
+
+- The following steps include writing code for methylation extraction of cytosine status in spike-in controls and conversion efficiency on single end reads for spike-in control. 
+
+- NOTE: files do need to be indexed and before starting any alignments as well as ensuring that you have all the proper reference genomes for the perspective species
+
+## Results Thus Far 
+
+- I have only got to my inital alignment processing. However; it has been showing that 56% of the Cs in the genome are methylated when they are preceded by a G and mapping efficiency or alignment rate for this sample is about 55.2%. These samples are untreated so the percentages on them are lower than what would be expected
+- Initial libraries are in the process of being sequenced, so all current data is processed on tester files; however, it provide a baseline for going forward. 
+- The objective right now is to analyze the alignment files from the referenced methylated genome then type the remaining code. Which will be transferred to a new platform more suitable for processing 

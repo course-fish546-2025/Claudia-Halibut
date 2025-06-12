@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Claudia RMarkdown Presentation</title>
+  <title>Claudia Mini Project Presentation</title>
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -19,7 +19,7 @@
     var SLIDE_CONFIG = {
       // Slide settings
       settings: {
-                title: 'Claudia RMarkdown Presentation',
+                title: 'Claudia Mini Project Presentation',
                         useBuilds: true,
         usePrettify: true,
         enableSlideAreas: true,
@@ -3197,39 +3197,100 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
           </hgroup>
   </slide>
 
-<slide class=""><hgroup><h2>Goal</h2></hgroup><article  id="goal">
+<slide class=""><hgroup><h2>Objectives</h2></hgroup><article  id="objectives">
 
 <ul>
-<li>Development of a Non-Lethal Genetic Technique for Determining Age of Pacific Halibut</li>
+<li>Development of a non-lethal genetic technique for determining age of pacific halibut using fin tissue samples.A method based on the identification of DNA methylation patterns associated with age through development of an age estimation model. This method represents an alternative to traditional aging methods, but not a replacement, the ultimate goal is to improve stock assessment by increasing the number of aged individuals used for age composition of the species.</li>
 </ul>
 
-<p>NOTE: Aging is typically conducted via the extraction of a fishes otolith. Which ultimately ends up contributing greatly towards fish mortality rates since you have to bonk (x_x) the fish</p>
+<p>NOTE: Aging is typically conducted via the extraction of a fishes otolith. Which ultimately ends up contributing largely towards species mortality rates – since you have to bonk (x_x) the fish</p>
 
-</article></slide><slide class=""><hgroup><h2>Initial Methods</h2></hgroup><article  id="initial-methods">
+</article></slide><slide class=""><hgroup><h2>Methodology</h2></hgroup><article  id="methodology">
 
 <ul>
-<li><p>Fin clips are collected through fishery independent set-line surveys (FISS) and have been double aged already by the International Pacific Halibut Commission (IPHC)</p></li>
-<li><p>DNA gets extracted and pooled into libraries containing only 48 samples. Done in batches to achieve 20x coverage with each pool</p></li>
-<li><p>Code gets written for trimming, alignments, methylation extraction, and more for initial clean-up and quality checks</p></li>
-<li><p>Once this is complete I will start the modeling process and identification of any CpG sites</p></li>
+<li>Fin clips are collected through fishery independent set-line surveys (FISS). Each sample has been double aged already by the International Pacific Halibut Commission (IPHC)</li>
+<li>DNA gets extracted and pooled into libraries containing only 48 samples each with the goal of achieving 20x coverage with each pool</li>
+<li>Methylation patterns will be investigated using genome-wide reduced representation bisulfite sequencing. A method that should be cost-efficient due to its potential for high read depth from a well-defined set of genomic regions</li>
+<li>Age-associated DNA mthylation patterns will be modelled to generate epigenetic age predictors</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Slide with Baseline R Code</h2></hgroup><article  id="slide-with-baseline-r-code">
+</article></slide><slide class=""><hgroup><h2>Reasoning</h2></hgroup><article  id="reasoning">
+
+<ul>
+<li>For most groundfish species age has traditionally been estimated manually by counting the number of annuli present in the otoliths. A method IPHC has used since around 1914. Otolith based methods are accurate but is a lethal aging technique</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Bash Code Used for Initial Analysis</h2></hgroup><article  id="bash-code-used-for-initial-analysis">
+
+<pre class = 'prettyprint lang-bash'>## Initial software needed gets downloaded to the system
+## Which looks something like below
+
+bismark_dir=&quot;/home/shared/Bismark-0.24.0&quot;
+bowtie2_dir=&quot;/home/shared/bowtie2-2.4.4-linux-x86_64/&quot;
+
+ OR
+ 
+curl -fsSL 
+https://github.com/FelixKrueger/TrimGalore/archive/0.6.10.tar.gz /
+-o trim_galore.tar.gz 
+tar xvzf trim_galore.tar.gz 
+</pre>
+
+</article></slide><slide class=""><hgroup><h2>Bash Continued….</h2></hgroup><article  id="bash-continued.">
 
 <pre class = 'prettyprint lang-bash'>
-Using project sample code as an example. 
-This is an example of what I type into the server for TrimGalore
+## An example of what is typed into TrimGalore for the raw reads
+## This code simply trims to the system default
 
 trim_galore --output_dir trimgalore-out --fastqc_args \
 &quot;--outdir fastqc-out&quot; \
   --basename ${SAMPLE2} --non_directional --rrbs --paired \
   --2colour=20 --keep \
-  umi-add/${SAMPLE2}_R1.fq.gz umi-add/${SAMPLE2}_R2.fq.gz</pre>
+  umi-add/${SAMPLE2}_R1.fq.gz umi-add/${SAMPLE2}_R2.fq.gz
+  </pre>
 
-</article></slide><slide class=""><hgroup><h2>Initial Output</h2></hgroup><article  id="initial-output">
+</article></slide><slide class=""><hgroup><h2>Continued…</h2></hgroup><article  id="continued">
 
-<pre class = 'prettyprint lang-bash'>## add code with document output
-plot()</pre></article></slide>
+<pre class = 'prettyprint lang-bash'>
+## Often followed by an alignment to any given reference genome
+
+curl -O 
+https://www.diagenode.com/files/products/kits/
+RRBS_v2_methylated_control.fa
+
+bismark -q --output_dir align-out --pbat --prefix /
+Meth_ctrl genomes -1 trimgalore-out/${as1}_val_1.fq.gz /
+-2 trimgalore-out/${as1}_val_2.fq.gz
+
+
+## results in a file: &quot;Meth_ctrl.E2_T1_C1_val_1_bismark_bt2_pe.bam&quot;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Continued…</h2></hgroup><article  id="continued-1">
+
+<pre class = 'prettyprint lang-bash'>## Next is the deduplication step that reads pairs 
+## aligned at the same genomic coordinates of the reference genome 
+## and carrying the same UMI sequence
+
+samtools sort align-out/Meth_ctrl.E1_T1_C2_val_1_bismark_bt2_pe.bam -
+o Meth_ctrl.E1_T1_C2_val_1_sorted.bam
+
+fumi_tools dedup -i Meth_ctrl.E1_T1_C2_val_1_sorted.bam -o
+Meth_ctrl.E1_T1_C2_val_1_dedup.bam --threads 6 --memory 3G --paired
+</pre>
+
+</article></slide><slide class=""><hgroup><h2>Follow-up steps</h2></hgroup><article  id="follow-up-steps">
+
+<ul>
+<li>The following steps include writing code for methylation extraction of cytosine status in spike-in controls and conversion efficiency on single end reads for spike-in control.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Results Thus Far</h2></hgroup><article  id="results-thus-far">
+
+<ul>
+<li>I have only got to my inital alignment processing. However; it has been showing that 56% of the Cs in the genome are methylated when they are preceded by a G and mapping efficiency or alignment rate for this sample is about 55.2%. These samples are untreated so the percentages on them are lower than what would be expected</li>
+<li>Initial libraries are in the process of being sequenced, so all current data is processed on tester files; however, it provide a baseline for going forward.</li>
+<li>The objective right now is to analyze the alignment files from the referenced methylated genome then type the remaining code. Which will be transferred to a new platform more suitable for processing</li>
+</ul></article></slide>
 
 
   <slide class="backdrop"></slide>
