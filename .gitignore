@@ -1,8 +1,4 @@
-
-project
-
-
-# R studio junk
+## Rstudio ignored file list 
 .Rproj.user/*
 .Rproj.user/55EBF0C6*
 .Rproj.user/shared/*
@@ -10,8 +6,30 @@ project
 .RData
 .Ruserdata
 
+assignments/07-CG-Motifs.qmd
+assignments/03.1-Knit-Blast.html
 assignments/output/kallisto_01/*
 assignments/output/F143*
 assignments/output/cgigas*
 assignments/output/Ab*
+assignments/output/E2*
 .Rproj.user
+
+project/genomes/B*
+project/genomes/R*
+project/trimgalore-out/*
+project/fastqc-out/*
+project/umi-add/*
+project/align-out
+project/genomes
+project/bismark*
+project/M*
+
+
+assignments/output/08*
+assignments/data/19F*
+assignments/output/blast_*
+assignments/data/GCF*
+assignments/data/C_vir*
+
+
