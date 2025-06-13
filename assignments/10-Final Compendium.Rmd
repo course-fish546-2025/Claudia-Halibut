@@ -1,0 +1,130 @@
+---
+title: "10-Final-Compendium"
+author: "Claudia U Berry"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output: 
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Objective
+
+The main goal of this project is to development a non-lethal genetic-based technique for determining the age of Pacific Halibut using fin tissue samples; Through the identification of DNA methylation patterns that are associated with age throughout lifetime development. This method would represent an alternative to traditional aging methods currently being used, but not a replacement, since the ultimate aim is to improve stock assessment by increasing the number of aged individuals used for age composition of the species without an asscoiated increase in mortality rates.
+
+NOTE: Please refrain from lethal practices involving fish (or another organism) when performing any scientific processes <3
+
+## Methodology
+
+An estimated 300 fin clips, with 8 individuals per age class, are collected through fishery independent set-line surveys (FISS). Each sample has been double aged by skilled otolith reader through an organization called the International Pacific Halibut Commission (IPHC).
+
+DNA is extracted from each fin clip then and pooled into multiple DNA libraries; containing 48 samples per library with the goal of achieving 20x coverage within each pool. Meaning each base will be read approxiamtely 20x throughout the sequencing process -- allowing for better accuracy. The sequences used for each library will be reduced representation bisulfite sequencing (RRBS).
+
+Each raw sequencing library will then be quality checked via FastQC, processed to remove illumina adapter sequences using TrimGalore, exclusion of sex chromosomes via Bismark, and converted to a binary alignment map format (BAM) with Samtools.
+
+Once finished the analysis of methylation patterns with genome-wide reduced representation bisulfite sequencing should allow for a method that is cost-efficient due to its potential for high read depth from a well-defined set of genomic regions with this particular species. RRBS produces hundred of thousands of CpGs with at least 20x coverage with methylation in >90%. At this point the BS-Seeker2 mthylation model will be used to generate epigenetic age predictors from the given samples.
+
+## Reasoning
+
+Most groundfish species have traditionally been aged manually by counting the number of annuli present in the otoliths. A method IPHC has used since around 1914, but cannot be used on fish that are not  sacrificed. Otolith based methods are undoubtedly accurate; the method simply races a few caveats: organismal sacrifice, manual processing, and no automation for imporved processing time/efficiency. Hence the techinique in question being used as an alternative. 
+
+## A Dive into Example Bash Code Being Used for Initial Analysis
+
+NOTE: below contains code that was typed with 10 tester samples, but IS NOT COMPLETE and MISSING portions after the de-duplication. 
+
+NOTE: files do need to be indexed and before starting any alignments as well as ensuring that you have all the proper reference genomes for the perspective species.
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## starts allowing for the initial set-up of necessary software.
+
+bismark_dir="/home/shared/Bismark-0.24.0" ## creates variable for bismark directory 
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/" ## creates variable for bowtie software (an alternative)
+
+ OR
+ 
+curl -fsSL https://github.com/FelixKrueger/TrimGalore/archive/0.6.10.tar.gz / 
+-o trim_galore.tar.gz tar xvzf trim_galore.tar.gz 
+## the "/" symbol above pushes attached code to a new line for a better fit
+```
+
+## Installation of Reference Genome Necessary for Bismark
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## below are all my personal reference genomes
+
+mkdir genomes ## create directory to store genome reference output files 
+cd genomes ## change directory
+curl -O https://www.diagenode.com/files/products/kits/RRBS_v2_methylated_control.fa
+curl -O https://www.diagenode.com/files/products/kits/RRBS_v2_unmethylated_control.fa
+curl -O https://www.diagenode.com/files/products/kits/RRBS_v2_methylated_spike_in_unmeth_positions.bed
+
+curl -O https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/022/539/355/GCF_022539355.2_HSTE1.2/GCF_022539355.2_HSTE1.2_genomic.fna.gz
+
+## below I will unzip the file, move as a new fasta file because only acceptable formats are .fa and .fasta. TAKE OUT /GCF/022/539/355/GCF_022539355.2_HSTE1.2 because unnecessary
+
+gunzip GCF_022539355.2_HSTE1.2_genomic.fna.gz ## unzip file 
+
+mv GCF_022539355.2_HSTE1.2_genomic.fna GCF_022539355.2_HSTE1.2_genomic.fa ## move file
+```
+
+## Example of Trimgalore Software Usage
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## an example of what is typed using TrimGalore software for the raw read files
+## this code simply trims to the system default. It contain no added basepair trimming information
+
+mkdir -p fastqc-out ## make directory for output of fastqc and trimgalore 
+mkdir -p trimgalore-out ## make directory for output of trimgalore 
+
+SAMPLE2="E1_T1_F2" ## processes E1_T1_F2_R1 and E1_T1_F2_R2
+
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE2} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE2}_R1.fq.gz umi-add/${SAMPLE2}_R2.fq.gz
+```
+
+## Bismark Alignment to Reference Genome 
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## below I will call upon the methylated reference genome using a tester sample
+
+mkdir -p align-out ## create directory for alignment output 
+
+as1="E1_T1_C2" #processes E1_T1_C2_R1 and E1_T1_C2_R2
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes /
+-1 trimgalore-out/${as1}_val_1.fq.gz /
+-2 trimgalore-out/${as1}_val_2.fq.gz
+
+## should result in an output file: "Meth_ctrl.E2_T1_C1_val_1_bismark_bt2_pe.bam"
+## unable to add image for display purposes
+```
+
+## De-duplication of Alignment BAM File... 
+
+```{r, engine='bash', eval=FALSE, echo = TRUE}
+## Next is the de-duplication step that reads pairs aligned at the same genomic coordinates of the reference genome and carrying the same UMI sequence
+
+samtools sort align-out/Meth_ctrl.E1_T1_C2_val_1_bismark_bt2_pe.bam -
+o Meth_ctrl.E1_T1_C2_val_1_sorted.bam
+
+fumi_tools dedup -i Meth_ctrl.E1_T1_C2_val_1_sorted.bam -o
+Meth_ctrl.E1_T1_C2_val_1_dedup.bam --threads 6 --memory 3G --paired
+```
+
+## Follow-up Steps After De-Duplication
+
+The following steps once you have performed you de-duplication on any aligned samples should be writing the code for the methylation extraction of cytosine status in spike-in controls and conversion efficiency on single end reads for spike-in control. A long way of saying to write your methylation extraction or conversion efficiency program
+
+## Results Thus Far 
+
+I have only got to my initial alignment processing done. However; the pe.bam files have been showing that 56% of the Cs in the genome are methylated when they are preceded by a G and mapping efficiency or alignment rate for this sample is about 55.2%. These samples are untreated so the percentages on them are lower than what would be expected. The initial libraries are in the process of being sequenced through another state institution, so all current data is processed on tester files -- providing a baseline for going forward
+
+Simply the objective at this current moment is to analyze any alignment files from the reference genome then program the remaining code necessary for de-duplication. Which will be transferred to a new platform more suitable for processing such as visual studio or a super computer
