@@ -1,0 +1,274 @@
+---
+title: "base.code-rrbs"
+output: html_document
+date: "2025-06-12"
+---
+```{r, echo=TRUE}
+## trimming and quality control - check yes 
+#NOTE:-98% conversion rate vs <2% conversion rate on bisulfite conversion
+## potentially discuss alignment to reference genome OR e-coli genome so I do not have to run reads twice
+
+#Fun fact: 'htop -u $USER' monitors current user (me) progress
+#Fun fact: 'tail -f bismark-genome-prep.log' will print out the end of the log created. Closest to real time format that might be done. 
+```
+
+```{r, engine='bash', echo=TRUE}
+## the below code has to be in the same block as the rest of the code in order to function, but I added the echo function to make sure that the block still functioned -- nothing will happen if left in this state
+
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+
+echo "Hi Claudia bismark_dir is ${bismark_dir} and bowtie2_dir is ${bowtie2_dir}"
+```
+
+```{r, engine='bash', eval=FALSE}
+## call the fasta files necessary for sequence procressing if necessary, but also index them before sequencing. Goes in order: methylated control, unmethylated control, unmethylated cytosine in the sequence of methylated control BED, and halibut genome
+
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+
+echo "Hi Claudia bismark_dir is ${bismark_dir} and bowtie2_dir is ${bowtie2_dir}"
+
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/project
+mkdir genomes
+cd genomes
+curl -O https://www.diagenode.com/files/products/kits/RRBS_v2_methylated_control.fa
+curl -O https://www.diagenode.com/files/products/kits/RRBS_v2_unmethylated_control.fa
+curl -O https://www.diagenode.com/files/products/kits/RRBS_v2_methylated_spike_in_unmeth_positions.bed
+
+curl -O https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/022/539/355/GCF_022539355.2_HSTE1.2/GCF_022539355.2_HSTE1.2_genomic.fna.gz
+
+## unzip file, move as a new fasta file because only acceptable formats are .fa and .fasta. TAKE OUT /GCF/022/539/355/GCF_022539355.2_HSTE1.2 because unnecessary NCBI directory information not located in mine
+
+gunzip GCF_022539355.2_HSTE1.2_genomic.fna.gz
+
+mv GCF_022539355.2_HSTE1.2_genomic.fna GCF_022539355.2_HSTE1.2_genomic.fa
+
+cd ..
+
+## --help -> STOP giving computer more credit; specify pathway to aligner, so no --${bowtie2_dir} because computer reads the '--' as a call on predownloaded function. Operational as of 5/13/2025 (YAY!!)
+
+${bismark_dir}/bismark_genome_preparation --path_to_aligner ${bowtie2_dir} genomes/ &> bismark-genome-prep.log
+```
+
+```{r, engine='bash', eval=FALSE}
+## install TrimGalore in application directory because it is not in shared directory
+
+cd ~/applications
+pwd
+curl -fsSL https://github.com/FelixKrueger/TrimGalore/archive/0.6.10.tar.gz -o trim_galore.tar.gz 
+tar xvzf trim_galore.tar.gz 
+ls
+```
+
+```{bash, eval=FALSE}
+pwd
+```
+
+```{r, engine='bash', eval=FALSE}
+## add Trimgalore software to pathway so accessed everywhere. Ensure directory is still located in project directory 
+
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/project
+echo "OLD PATH: ${PATH}"
+export PATH="~/applications/TrimGalore-0.6.10:/home/shared/cutadapt-venv/bin:/home/shared/FastQC-0.12.1:$PATH"
+echo "NEW PATH: ${PATH}"
+
+## run TrimGalore, but since added to file path it is commented out 
+#~/applications/TrimGalore-0.6.10/trim_galore --help
+
+pwd 
+mkdir -p fastqc-out
+mkdir -p trimgalore-out
+
+SAMPLE="E1_T1_C2" #processes E1_T1_C2_R1 and E1_T1_C2_R2
+
+#2colour code due to Novaseq processing. 'tail -f' is only functional on .txt file. TrimGalore formatting requires: location/${variable}_ending...
+#NOTE: TrimGalore auto-detects adapters, view manual via Git (--Hardtrim5)
+
+trim_galore -p --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE}_R1.fq.gz umi-add/${SAMPLE}_R2.fq.gz 
+
+#---------------------------------------------------------------------------------------
+#IMPORTANT-ish for checking ---
+#zcat umi-add/E1_T1_C2_R1.fq.gz | head -8 - head or tails depends
+#zcat umi-add/E1_T1_C2_R1.fq.gz | less -S 
+#zcat trimgalore-out/E1_T1_C2_R1_trimmed.fq.gz | less -S \ 
+#for i in $(ls umi-add/*R1.fq.gz); do echo $i ${i%_R1.fq.gz}; done -- returns files without 
+#for i in $(ls umi-add/*R1.fq.gz); do echo $i ${i%_R1}; done -- returns files with R1 ending but without .fq.gz
+```
+
+```{r, engine='bash', eval=FALSE}
+## add the change directory again to ensure it is right and re-type export path so it gets referenced in new chunk (SAME BELOW)
+
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/project
+echo "OLD PATH: ${PATH}"
+export PATH="~/applications/TrimGalore-0.6.10:/home/shared/cutadapt-venv/bin:/home/shared/FastQC-0.12.1:$PATH"
+echo "NEW PATH: ${PATH}"
+
+SAMPLE2="E1_T1_F2" #processes E1_T1_F2_R1 and E1_T1_F2_R2
+SAMPLE3="E1_T2_C1" #processes E1_T2_C1_R1 and E1_T2_C1_R2
+SAMPLE4="E1_T2_C2" #processes E1_T2_C2_R1 and E1_T2_C2_R2
+SAMPLE5="E2_T1_C1_100" #processes E2_T1_C1_100_R1 and E2_T1_C1_100_R2
+
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE2} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE2}_R1.fq.gz umi-add/${SAMPLE2}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE3} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE3}_R1.fq.gz umi-add/${SAMPLE3}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE4} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE4}_R1.fq.gz umi-add/${SAMPLE4}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE5} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE5}_R1.fq.gz umi-add/${SAMPLE5}_R2.fq.gz
+
+```
+
+```{r, engine='bash', eval=FALSE}
+cd /home/shared/8TB_HDD_02/cberry1/Claudia-Halibut/project
+echo "OLD PATH: ${PATH}"
+export PATH="~/applications/TrimGalore-0.6.10:/home/shared/cutadapt-venv/bin:/home/shared/FastQC-0.12.1:$PATH"
+echo "NEW PATH: ${PATH}"
+
+SAMPLE6="E2_T1_C1" #processes E2_T1_C1_R1 and E2_T1_C1_R2
+SAMPLE7="E2_T1_E1" #processes E2_T1_E1_R1 and E2_T1_E1_R2
+SAMPLE8="E2_T1_F2" #processes E2_T1_F2_R1 and E2_T1_F2_R2
+SAMPLE9="E2_T1_G1" #processes E2_T1_G1_R1 and E2_T1_G1_R2
+SAMPLE10="E2_T2_F1" #processes E2_T2_F1_R1 and E2_T2_F1_R2
+
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE6} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE6}_R1.fq.gz umi-add/${SAMPLE6}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE7} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE7}_R1.fq.gz umi-add/${SAMPLE7}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE8} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE8}_R1.fq.gz umi-add/${SAMPLE8}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE9} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE9}_R1.fq.gz umi-add/${SAMPLE9}_R2.fq.gz
+  
+trim_galore --output_dir trimgalore-out --fastqc_args "--outdir fastqc-out" \
+  --basename ${SAMPLE10} --non_directional --rrbs --paired --2colour=20 --keep \
+  umi-add/${SAMPLE10}_R1.fq.gz umi-add/${SAMPLE10}_R2.fq.gz
+```
+
+```{r, engine='bash', eval=FALSE}
+## typed starter/tester alignment code (Bismark)
+## assign variables for Bismark software itself
+
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+
+## add Bismark to pathway, check directory first, but echo path to ensure code works
+pwd
+echo "OLD PATH: ${PATH}"
+export PATH="/home/shared/Bismark-0.24.0:/home/shared/bowtie2-2.4.4-linux-x86_64/:$PATH"
+#export PATH="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+echo "NEW PATH: ${PATH}"
+
+## create a directory called align-out
+mkdir -p align-out
+
+## using TRIMGALORE FILE samples because fastqc provides more quality based report. --pbat aligning reads to the complementary strands of DNA
+
+as1="E1_T1_C2" #processes E1_T1_C2_R1 and E1_T1_C2_R2
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as1}_val_1.fq.gz -2 trimgalore-out/${as1}_val_2.fq.gz
+
+as2="E1_T1_F2" #processes E1_T1_F2_R1 and E1_T1_F2_R2
+as3="E1_T2_C1" #processes E1_T2_C1_R1 and E1_T2_C1_R2
+as4="E1_T2_C2" #processes E1_T2_C2_R1 and E1_T2_C2_R2
+as5="E2_T1_C1_100" #processes E2_T1_C1_100_R1 and E2_T1_C1_100_R2
+as6="E2_T1_C1" #processes E2_T1_C1_R1 and E2_T1_C1_R2
+#as7="E2_T1_E1" #processes E2_T1_E1_R1 and E2_T1_E1_R2
+#as8="E2_T1_F2" #processes E2_T1_F2_R1 and E2_T1_F2_R2
+#as9="E2_T1_G1" #processes E2_T1_G1_R1 and E2_T1_G1_R2
+#as10="E2_T2_F1" #processes E2_T2_F1_R1 and E2_T2_F1_R2
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as2}_val_1.fq.gz -2 trimgalore-out/${as2}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as3}_val_1.fq.gz -2 trimgalore-out/${as3}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as4}_val_1.fq.gz -2 trimgalore-out/${as4}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as5}_val_1.fq.gz -2 trimgalore-out/${as5}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as6}_val_1.fq.gz -2 trimgalore-out/${as6}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as7}_val_1.fq.gz -2 trimgalore-out/${as7}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as8}_val_1.fq.gz -2 trimgalore-out/${as8}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as9}_val_1.fq.gz -2 trimgalore-out/${as9}_val_2.fq.gz
+
+bismark -q --output_dir align-out --pbat --prefix Meth_ctrl genomes -1 trimgalore-out/${as10}_val_1.fq.gz -2 trimgalore-out/${as10}_val_2.fq.gz
+```
+
+```{r, engine='bash', eval=FALSE}
+## alignment to unmethylated genome - needs to be edited
+
+bismark_dir="/home/shared/Bismark-0.24.0"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+pwd
+export PATH="/home/shared/Bismark-0.24.0:/home/shared/bowtie2-2.4.4-linux-x86_64/:$PATH"
+
+as1="E1_T1_C2" #processes E1_T1_C2_R1 and E1_T1_C2_R2
+as2="E1_T1_F2" #processes E1_T1_F2_R1 and E1_T1_F2_R2
+as3="E1_T2_C1" #processes E1_T2_C1_R1 and E1_T2_C1_R2
+as4="E1_T2_C2" #processes E1_T2_C2_R1 and E1_T2_C2_R2
+as5="E2_T1_C1_100" #processes E2_T1_C1_100_R1 and E2_T1_C1_100_R2
+as6="E2_T1_C1" #processes E2_T1_C1_R1 and E2_T1_C1_R2
+as7="E2_T1_E1" #processes E2_T1_E1_R1 and E2_T1_E1_R2
+as8="E2_T1_F2" #processes E2_T1_F2_R1 and E2_T1_F2_R2
+as9="E2_T1_G1" #processes E2_T1_G1_R1 and E2_T1_G1_R2
+as10="E2_T2_F1" #processes E2_T2_F1_R1 and E2_T2_F1_R2
+
+#-------- 6/12/2025 yet to be run due to not needing reference to unmethylated genome -----------
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as1}_val_1.fq -2 ${as1}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as2}_val_1.fq -2 ${as2}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as3}_val_1.fq -2 ${as3}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as4}_val_1.fq -2 ${as4}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as5}_val_1.fq -2 ${as5}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as6}_val_1.fq -2 ${as6}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as7}_val_1.fq -2 ${as7}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as8}_val_1.fq -2 ${as8}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as9}_val_1.fq -2 ${as9}_val_2.fq
+
+bismark -q --output_dir align-out --pbat --prefix unmeth_ctrl genomes RRBS_v2_unmethylated_control -1 ${as10}_val_1.fq -2 ${as10}_val_2.fq
+
+```
+
+```{r, engine='bash', eval=FALSE}
+## tester de-duplication code
+
+sam_dir="/home/shared/samtools-1.12"
+export PATH="/home/shared/samtools-1.12"
+echo "NEW PATH: ${PATH}"
+mkdir sam-out
+
+samtools sort align-out/Meth_ctrl.E1_T1_C2_val_1_bismark_bt2_pe.bam -
+o Meth_ctrl.E1_T1_C2_val_1_sorted.bam
+
+fumi_tools dedup -i Meth_ctrl.E1_T1_C2_val_1_sorted.bam -o
+Meth_ctrl.E1_T1_C2_val_1_dedup.bam --threads 6 --memory 3G --paired
+```
+
