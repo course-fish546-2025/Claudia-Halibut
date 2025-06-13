@@ -3,14 +3,13 @@ data/*
 output/kallisto*
 assignments/output/*
 05-Variants.qmd
-## Rstudio ignored file list 
+## Rstudio ignored file list
 .Rproj.user/*
 .Rproj.user/55EBF0C6*
 .Rproj.user/shared/*
 .Rhistory
 .RData
 .Ruserdata
-
 assignments/07-CG-Motifs.qmd
 assignments/03.1-Knit-Blast.html
 assignments/output/kallisto_01/*
@@ -18,8 +17,10 @@ assignments/output/F143*
 assignments/output/cgigas*
 assignments/output/Ab*
 assignments/output/E2*
+assignments/cgigas*
+assignments/r*
+assignments/10-Final-Compen*
 .Rproj.user
-
 project/genomes/B*
 project/genomes/R*
 project/trimgalore-out/*
@@ -29,3 +30,5 @@ project/align-out
 project/genomes
 project/M*
 project/bismark*
+project/fish-rrbs*
+assignments/03.1-Knit-Blast.html
